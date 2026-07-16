@@ -16,6 +16,7 @@ use App\Http\Controllers\Master\CustomerController;
 use App\Http\Controllers\Master\VehicleController;
 use App\Http\Controllers\Transaction\ServiceAdvisorController;
 use App\Http\Controllers\Transaction\WorkOrderController;
+use App\Http\Controllers\Transaction\WorkOrderJobController;
 
 /*
 |--------------------------------------------------------------------------
@@ -187,6 +188,21 @@ Route::group(['middleware' => 'auth'], function () {
 
 			Route::post('/', 'store')->name('store');
 			Route::put('/', 'update')->name('update');
+		});
+
+	Route::prefix('transactions/work-order-jobs')
+		->name('transactions.work-order-jobs.')
+		->controller(WorkOrderJobController::class)
+		->group(function () {
+			Route::post('/', 'store')->name('store');
+
+			Route::put('/{workOrderJob}', 'update')
+				->whereNumber('workOrderJob')
+				->name('update');
+
+			Route::delete('/{workOrderJob}', 'destroy')
+				->whereNumber('workOrderJob')
+				->name('destroy');
 		});
 });
 

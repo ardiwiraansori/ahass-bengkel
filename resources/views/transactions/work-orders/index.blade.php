@@ -276,6 +276,159 @@
             </div>
         </div>
     </div>
+
+    {{-- Modal Kelola Jasa Work Order --}}
+    <div class="modal fade" id="wo-job-modal" tabindex="-1" aria-labelledby="wo-job-modal-label" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div>
+                        <h5 class="modal-title mb-1" id="wo-job-modal-label">
+                            Kelola Jasa Work Order
+                        </h5>
+
+                        <div class="text-sm text-secondary">
+                            <span id="wo-job-work-order-id">-</span>
+                            <span class="mx-1">•</span>
+                            <span class="badge bg-gradient-secondary" id="wo-job-status">
+                                -
+                            </span>
+                        </div>
+                    </div>
+
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
+                </div>
+
+                <div class="modal-body">
+                    <div id="wo-job-alert"></div>
+
+                    <div class="card border shadow-none mb-4" id="wo-job-form-container">
+                        <div class="card-body">
+                            <h6 class="mb-3" id="wo-job-form-title">
+                                Tambah Jasa
+                            </h6>
+
+                            <form id="wo-job-form">
+                                <div class="row align-items-end">
+                                    <div class="col-md-7">
+                                        <div class="mb-3 mb-md-0">
+                                            <label for="wo-job-id-job" class="form-label">
+                                                Master Jasa
+                                            </label>
+
+                                            <select class="form-select" id="wo-job-id-job">
+                                                <option value="">
+                                                    Memuat jasa...
+                                                </option>
+                                            </select>
+
+                                            <div class="invalid-feedback" id="wo-job-error-id_job"></div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-2">
+                                        <div class="mb-3 mb-md-0">
+                                            <label for="wo-job-qty" class="form-label">
+                                                Qty
+                                            </label>
+
+                                            <input type="number" class="form-control" id="wo-job-qty" min="1"
+                                                max="999" step="1" value="1">
+
+                                            <div class="invalid-feedback" id="wo-job-error-qty"></div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-3">
+                                        <button type="submit" class="btn bg-gradient-primary mb-0" id="btn-save-wo-job">
+                                            Tambah
+                                        </button>
+
+                                        <button type="button" class="btn btn-light mb-0 d-none"
+                                            id="btn-cancel-edit-wo-job">
+                                            Batal Edit
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="table align-items-center mb-0" id="wo-job-table">
+                            <thead>
+                                <tr>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                        No.
+                                    </th>
+
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                        ID Jasa
+                                    </th>
+
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                        Keterangan
+                                    </th>
+
+                                    <th
+                                        class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 text-center">
+                                        Qty
+                                    </th>
+
+                                    <th
+                                        class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 text-end">
+                                        Harga
+                                    </th>
+
+                                    <th
+                                        class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 text-end">
+                                        Subtotal
+                                    </th>
+
+                                    <th
+                                        class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 text-center">
+                                        Aksi
+                                    </th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="wo-job-table-body">
+                                <tr>
+                                    <td colspan="7" class="text-center py-4">
+                                        Belum ada jasa.
+                                    </td>
+                                </tr>
+                            </tbody>
+
+                            <tfoot>
+                                <tr>
+                                    <th colspan="5" class="text-end">
+                                        Total Jasa
+                                    </th>
+
+                                    <th class="text-end" id="wo-job-total">
+                                        Rp0
+                                    </th>
+
+                                    <th></th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+
+                    <div id="wo-job-empty" class="text-center text-secondary py-4 d-none">
+                        Belum ada jasa pada Work Order ini.
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light mb-0" data-bs-dismiss="modal">
+                        Tutup
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @push('styles')
@@ -298,6 +451,24 @@
         #wo-table .btn {
             font-size: 11px;
         }
+
+        #wo-job-table th,
+        #wo-job-table td {
+            vertical-align: middle;
+        }
+
+        #wo-job-table td:nth-child(3) {
+            min-width: 260px;
+            white-space: normal;
+        }
+
+        #wo-job-table td:last-child {
+            white-space: nowrap;
+        }
+
+        #wo-job-table .btn {
+            font-size: 11px;
+        }
     </style>
 @endpush
 
@@ -308,6 +479,26 @@
                 @json(url('/transactions/work-orders'));
 
             const detailUrl = `${baseUrl}/detail`;
+
+            const workOrderJobBaseUrl =
+                @json(url('/transactions/work-order-jobs'));
+
+            const serviceJobDataUrl =
+                @json(url('/master/jobs/data'));
+
+            const woJobModalElement =
+                document.getElementById('wo-job-modal');
+
+            const woJobModal =
+                bootstrap.Modal.getOrCreateInstance(
+                    woJobModalElement
+                );
+
+            let serviceJobs = [];
+            let activeWorkOrderId = null;
+            let activeWorkOrderStatus = null;
+            let activeWorkOrderJobs = [];
+            let editingWorkOrderJobId = null;
 
             const serviceAdvisorDataUrl =
                 @json(url('/transactions/service-advisors/data'));
@@ -343,6 +534,7 @@
                 });
 
             loadWorkOrders();
+            loadServiceJobs();
 
             $('#btn-add-wo').on('click', function() {
                 openCreateModal();
@@ -379,29 +571,27 @@
                 const isEdit =
                     $('#wo-form-mode').val() === 'edit';
 
-                const payload = isEdit ?
-                    {
-                        id_wo: $('#id_wo').val(),
+                const payload = isEdit ? {
+                    id_wo: $('#id_wo').val(),
 
-                        id_mekanik: $('#id_mekanik').val(),
+                    id_mekanik: $('#id_mekanik').val(),
 
-                        diskon: $('#diskon')
-                            .val()
-                            .replace(/\D/g, ''),
+                    diskon: $('#diskon')
+                        .val()
+                        .replace(/\D/g, ''),
 
-                        catatan_mekanik: $('#catatan_mekanik')
-                            .val()
-                            .trim(),
-                    } :
-                    {
-                        id_sa: $('#id_sa').val(),
+                    catatan_mekanik: $('#catatan_mekanik')
+                        .val()
+                        .trim(),
+                } : {
+                    id_sa: $('#id_sa').val(),
 
-                        id_mekanik: $('#id_mekanik').val(),
+                    id_mekanik: $('#id_mekanik').val(),
 
-                        catatan_mekanik: $('#catatan_mekanik')
-                            .val()
-                            .trim(),
-                    };
+                    catatan_mekanik: $('#catatan_mekanik')
+                        .val()
+                        .trim(),
+                };
 
                 setSubmitLoading(true);
 
@@ -464,6 +654,646 @@
                     );
                 }
             );
+
+            $(document).on(
+                'click',
+                '.btn-manage-jobs',
+                function() {
+                    loadWorkOrderJobs(
+                        $(this).data('id'),
+                        true
+                    );
+                }
+            );
+
+            $('#wo-job-form').on(
+                'submit',
+                function(event) {
+                    event.preventDefault();
+
+                    clearWorkOrderJobValidation();
+
+                    const isEdit =
+                        editingWorkOrderJobId !== null;
+
+                    const payload = isEdit ? {
+                        qty: $('#wo-job-qty').val(),
+                    } : {
+                        id_wo: activeWorkOrderId,
+                        id_job: $('#wo-job-id-job').val(),
+                        qty: $('#wo-job-qty').val(),
+                    };
+
+                    setWorkOrderJobSubmitLoading(true);
+
+                    $.ajax({
+                            url: isEdit ?
+                                `${workOrderJobBaseUrl}/${editingWorkOrderJobId}` : workOrderJobBaseUrl,
+
+                            type: isEdit ? 'PUT' : 'POST',
+
+                            data: payload,
+                        })
+                        .done(function(response) {
+                            showWorkOrderJobAlert(
+                                'success',
+                                response.message
+                            );
+
+                            resetWorkOrderJobForm();
+
+                            loadWorkOrderJobs(
+                                activeWorkOrderId,
+                                false
+                            );
+
+                            loadWorkOrders();
+                        })
+                        .fail(function(xhr) {
+                            if (
+                                xhr.status === 422 &&
+                                xhr.responseJSON?.errors
+                            ) {
+                                showWorkOrderJobValidation(
+                                    xhr.responseJSON.errors
+                                );
+
+                                return;
+                            }
+
+                            showWorkOrderJobAlert(
+                                'danger',
+                                xhr.responseJSON?.message ??
+                                'Jasa Work Order gagal disimpan.'
+                            );
+                        })
+                        .always(function() {
+                            setWorkOrderJobSubmitLoading(false);
+                        });
+                }
+            );
+
+            $(document).on(
+                'click',
+                '.btn-edit-wo-job',
+                function() {
+                    const workOrderJobId =
+                        Number($(this).data('id'));
+
+                    const workOrderJob =
+                        activeWorkOrderJobs.find(
+                            function(item) {
+                                return Number(item.id) ===
+                                    workOrderJobId;
+                            }
+                        );
+
+                    if (!workOrderJob) {
+                        return;
+                    }
+
+                    editingWorkOrderJobId =
+                        workOrderJob.id;
+
+                    $('#wo-job-form-title')
+                        .text('Edit Jumlah Jasa');
+
+                    renderServiceJobOptions(
+                        workOrderJob.id_job
+                    );
+
+                    $('#wo-job-id-job')
+                        .val(workOrderJob.id_job)
+                        .prop('disabled', true);
+
+                    $('#wo-job-qty')
+                        .val(workOrderJob.qty);
+
+                    $('#btn-save-wo-job')
+                        .text('Simpan Perubahan');
+
+                    $('#btn-cancel-edit-wo-job')
+                        .removeClass('d-none');
+
+                    clearWorkOrderJobValidation();
+                }
+            );
+
+            $('#btn-cancel-edit-wo-job').on(
+                'click',
+                function() {
+                    resetWorkOrderJobForm();
+                }
+            );
+
+            $(document).on(
+                'click',
+                '.btn-delete-wo-job',
+                function() {
+                    const workOrderJobId =
+                        $(this).data('id');
+
+                    const jobDescription =
+                        $(this).data('name');
+
+                    if (
+                        !confirm(
+                            `Yakin ingin menghapus jasa "${jobDescription}"?`
+                        )
+                    ) {
+                        return;
+                    }
+
+                    $.ajax({
+                            url: `${workOrderJobBaseUrl}/` +
+                                workOrderJobId,
+
+                            type: 'DELETE',
+                        })
+                        .done(function(response) {
+                            showWorkOrderJobAlert(
+                                'success',
+                                response.message
+                            );
+
+                            resetWorkOrderJobForm();
+
+                            loadWorkOrderJobs(
+                                activeWorkOrderId,
+                                false
+                            );
+
+                            loadWorkOrders();
+                        })
+                        .fail(function(xhr) {
+                            const message =
+                                firstValidationMessage(xhr) ??
+                                xhr.responseJSON?.message ??
+                                'Jasa Work Order gagal dihapus.';
+
+                            showWorkOrderJobAlert(
+                                'danger',
+                                message
+                            );
+                        });
+                }
+            );
+
+            function loadServiceJobs() {
+                $('#wo-job-id-job')
+                    .prop('disabled', true)
+                    .html(`
+            <option value="">
+                Memuat master jasa...
+            </option>
+        `);
+
+                return $.ajax({
+                        url: serviceJobDataUrl,
+                        type: 'GET',
+                    })
+                    .done(function(response) {
+                        const rows = Array.isArray(response.data) ?
+                            response.data :
+                            (
+                                Array.isArray(response.data?.data) ?
+                                response.data.data : []
+                            );
+
+                        serviceJobs = rows.filter(
+                            function(serviceJob) {
+                                const activeValue =
+                                    serviceJob.is_active ??
+                                    serviceJob.status_aktif ??
+                                    false;
+
+                                return (
+                                    activeValue === true ||
+                                    activeValue === 1 ||
+                                    activeValue === '1' ||
+                                    activeValue === 'true'
+                                );
+                            }
+                        );
+
+                        renderServiceJobOptions();
+                    })
+                    .fail(function(xhr) {
+                        serviceJobs = [];
+
+                        $('#wo-job-id-job')
+                            .prop('disabled', true)
+                            .html(`
+                <option value="">
+                    Master jasa gagal dimuat
+                </option>
+            `);
+
+                        console.error(
+                            'Gagal memuat Master Jasa:',
+                            xhr.responseJSON ?? xhr.responseText
+                        );
+                    });
+            }
+
+
+            function loadWorkOrderJobs(
+                workOrderId,
+                showModal = true
+            ) {
+                $('#wo-job-table-body').html(`
+        <tr>
+            <td colspan="7" class="text-center py-4">
+                Memuat jasa...
+            </td>
+        </tr>
+    `);
+
+                $('#wo-job-empty').addClass('d-none');
+
+                return $.ajax({
+                        url: detailUrl,
+                        type: 'GET',
+                        data: {
+                            id_wo: workOrderId,
+                        },
+                    })
+                    .done(function(response) {
+                        const workOrder = response.data;
+
+                        activeWorkOrderId =
+                            workOrder.id_wo;
+
+                        activeWorkOrderStatus =
+                            workOrder.status;
+
+                        activeWorkOrderJobs =
+                            workOrder.jobs ?? [];
+
+                        $('#wo-job-work-order-id')
+                            .text(activeWorkOrderId);
+
+                        $('#wo-job-status')
+                            .attr(
+                                'class',
+                                `badge ${
+                    workOrderStatusClass(
+                        activeWorkOrderStatus
+                    )
+                }`
+                            )
+                            .text(activeWorkOrderStatus);
+
+                        const editable = [
+                            'DRAFT',
+                            'MENUNGGU',
+                        ].includes(activeWorkOrderStatus);
+
+                        $('#wo-job-form-container')
+                            .toggleClass(
+                                'd-none',
+                                !editable
+                            );
+
+                        resetWorkOrderJobForm();
+                        renderWorkOrderJobs();
+
+                        $('#wo-job-total').text(
+                            formatRupiah(
+                                workOrder.total_jasa
+                            )
+                        );
+
+                        if (showModal) {
+                            woJobModal.show();
+                        }
+                    })
+                    .fail(function(xhr) {
+                        showAlert(
+                            'danger',
+                            xhr.responseJSON?.message ??
+                            'Data jasa Work Order gagal dimuat.'
+                        );
+                    });
+            }
+
+            function renderWorkOrderJobs() {
+                const editable = [
+                    'DRAFT',
+                    'MENUNGGU',
+                ].includes(activeWorkOrderStatus);
+
+                if (
+                    activeWorkOrderJobs.length === 0
+                ) {
+                    $('#wo-job-table-body').empty();
+
+                    $('#wo-job-empty')
+                        .removeClass('d-none');
+
+                    return;
+                }
+
+                $('#wo-job-empty').addClass('d-none');
+
+                const rows = activeWorkOrderJobs.map(
+                    function(workOrderJob, index) {
+                        const actions = editable ?
+                            `
+                    <button
+                        type="button"
+                        class="btn btn-sm btn-outline-primary px-3 mb-0 me-1 btn-edit-wo-job"
+                        data-id="${workOrderJob.id}"
+                    >
+                        Edit
+                    </button>
+
+                    <button
+                        type="button"
+                        class="btn btn-sm btn-outline-danger px-3 mb-0 btn-delete-wo-job"
+                        data-id="${workOrderJob.id}"
+                        data-name="${escapeHtml(
+                            workOrderJob
+                                .keterangan_job
+                        )}"
+                    >
+                        Hapus
+                    </button>
+                  ` :
+                            `
+                    <span class="text-xs text-secondary">
+                        Tidak dapat diubah
+                    </span>
+                  `;
+
+                        return `
+                <tr>
+                    <td class="ps-4">
+                        <span class="text-sm">
+                            ${index + 1}
+                        </span>
+                    </td>
+
+                    <td>
+                        <span class="text-sm font-weight-bold">
+                            ${escapeHtml(
+                                workOrderJob.id_job
+                            )}
+                        </span>
+                    </td>
+
+                    <td>
+                        <span class="text-sm">
+                            ${escapeHtml(
+                                workOrderJob
+                                    .keterangan_job
+                            )}
+                        </span>
+                    </td>
+
+                    <td class="text-center">
+                        <span class="badge bg-gradient-info">
+                            ${workOrderJob.qty}
+                        </span>
+                    </td>
+
+                    <td class="text-end">
+                        <span class="text-sm">
+                            ${formatRupiah(
+                                workOrderJob
+                                    .harga_satuan
+                            )}
+                        </span>
+                    </td>
+
+                    <td class="text-end">
+                        <span class="text-sm font-weight-bold">
+                            ${formatRupiah(
+                                workOrderJob.subtotal
+                            )}
+                        </span>
+                    </td>
+
+                    <td class="text-center">
+                        ${actions}
+                    </td>
+                </tr>
+            `;
+                    }
+                ).join('');
+
+                $('#wo-job-table-body').html(rows);
+            }
+
+            function renderServiceJobOptions(
+                selectedJobId = null
+            ) {
+                const select =
+                    $('#wo-job-id-job');
+
+                if (serviceJobs.length === 0) {
+                    select
+                        .prop('disabled', true)
+                        .html(`
+                <option value="">
+                    Tidak ada Master Jasa aktif
+                </option>
+            `);
+
+                    return;
+                }
+
+                const usedJobIds =
+                    activeWorkOrderJobs.map(
+                        function(workOrderJob) {
+                            return String(
+                                workOrderJob.id_job
+                            );
+                        }
+                    );
+
+                const availableJobs =
+                    serviceJobs.filter(
+                        function(serviceJob) {
+                            const serviceJobId =
+                                String(serviceJob.id_job);
+
+                            return (
+                                serviceJobId ===
+                                String(selectedJobId ?? '') ||
+                                !usedJobIds.includes(
+                                    serviceJobId
+                                )
+                            );
+                        }
+                    );
+
+                if (availableJobs.length === 0) {
+                    select
+                        .prop('disabled', true)
+                        .html(`
+                <option value="">
+                    Semua jasa aktif sudah ditambahkan
+                </option>
+            `);
+
+                    return;
+                }
+
+                const options =
+                    availableJobs.map(
+                        function(serviceJob) {
+                            return `
+                    <option
+                        value="${escapeHtml(
+                            serviceJob.id_job
+                        )}"
+                    >
+                        ${escapeHtml(
+                            serviceJob.keterangan
+                        )}
+                        — ${formatRupiah(
+                            serviceJob.harga
+                        )}
+                    </option>
+                `;
+                        }
+                    ).join('');
+
+                select
+                    .prop(
+                        'disabled',
+                        editingWorkOrderJobId !== null
+                    )
+                    .html(`
+            <option value="">
+                Pilih jasa
+            </option>
+            ${options}
+        `);
+
+                if (selectedJobId) {
+                    select.val(
+                        String(selectedJobId)
+                    );
+                }
+            }
+
+            function resetWorkOrderJobForm() {
+                editingWorkOrderJobId = null;
+
+                $('#wo-job-form')[0].reset();
+
+                $('#wo-job-form-title')
+                    .text('Tambah Jasa');
+
+                $('#wo-job-qty').val(1);
+
+                $('#wo-job-id-job')
+                    .prop('disabled', false);
+
+                $('#btn-save-wo-job')
+                    .text('Tambah');
+
+                $('#btn-cancel-edit-wo-job')
+                    .addClass('d-none');
+
+                clearWorkOrderJobValidation();
+                renderServiceJobOptions();
+            }
+
+            function showWorkOrderJobValidation(
+                errors
+            ) {
+                Object.keys(errors).forEach(
+                    function(field) {
+                        if (field === 'id_wo') {
+                            showWorkOrderJobAlert(
+                                'danger',
+                                errors[field][0]
+                            );
+
+                            return;
+                        }
+
+                        const input =
+                            field === 'id_job' ?
+                            $('#wo-job-id-job') :
+                            $(`#wo-job-${field}`);
+
+                        const errorContainer =
+                            $(`#wo-job-error-${field}`);
+
+                        input.addClass('is-invalid');
+
+                        errorContainer.text(
+                            errors[field][0]
+                        );
+                    }
+                );
+            }
+
+            function clearWorkOrderJobValidation() {
+                $('#wo-job-form .is-invalid')
+                    .removeClass('is-invalid');
+
+                $('#wo-job-form .invalid-feedback')
+                    .text('');
+            }
+
+            function setWorkOrderJobSubmitLoading(
+                isLoading
+            ) {
+                const button =
+                    $('#btn-save-wo-job');
+
+                button.prop('disabled', isLoading);
+
+                if (isLoading) {
+                    button.text('Menyimpan...');
+                    return;
+                }
+
+                button.text(
+                    editingWorkOrderJobId ?
+                    'Simpan Perubahan' :
+                    'Tambah'
+                );
+            }
+
+            function showWorkOrderJobAlert(
+                type,
+                message
+            ) {
+                $('#wo-job-alert').html(`
+        <div
+            class="alert alert-${type} alert-dismissible text-white fade show"
+            role="alert"
+        >
+            ${escapeHtml(message)}
+
+            <button
+                type="button"
+                class="btn-close btn-close-white"
+                data-bs-dismiss="alert"
+                aria-label="Tutup"
+            ></button>
+        </div>
+    `);
+            }
+
+            function workOrderStatusClass(status) {
+                const classes = {
+                    DRAFT: 'bg-gradient-secondary',
+                    MENUNGGU: 'bg-gradient-warning',
+                    DIKERJAKAN: 'bg-gradient-info',
+                    SELESAI: 'bg-gradient-success',
+                    BATAL: 'bg-gradient-danger',
+                };
+
+                return classes[status] ??
+                    'bg-gradient-dark';
+            }
 
             function openCreateModal(
                 selectedServiceAdvisorId = null
@@ -952,55 +1782,65 @@
                                 </span>
                             </td>
 
-                            <td>
-                                <span class="text-sm">
-                                    ${escapeHtml(
-                                        workOrder.mechanic
-                                            ?.nama_mekanik
-                                            ?? 'Belum ditentukan'
-                                    )}
-                                </span>
-                            </td>
+                         <td>
+    <span class="text-sm">
+        ${escapeHtml(
+            workOrder.mechanic
+                ?.nama_mekanik
+                ?? 'Belum ditentukan'
+        )}
+    </span>
+</td>
 
-                            <td class="text-center">
-                                <span class="badge bg-gradient-info">
-                                    ${workOrder.jobs_count ?? 0}
-                                </span>
-                            </td>
+<td class="text-center">
+    <span class="badge bg-gradient-info">
+        ${workOrder.jobs_count ?? 0}
+    </span>
+</td>
 
-                            <td class="text-center">
-                                <span class="badge bg-gradient-warning">
-                                    ${workOrder.parts_count ?? 0}
-                                </span>
-                            </td>
+<td class="text-center">
+    <span class="badge bg-gradient-warning">
+        ${workOrder.parts_count ?? 0}
+    </span>
+</td>
 
-                            <td class="text-end">
-                                <span class="text-sm font-weight-bold">
-                                    ${formatRupiah(
-                                        workOrder.grand_total
-                                    )}
-                                </span>
-                            </td>
+<td class="text-end">
+    <span class="text-sm font-weight-bold">
+        ${formatRupiah(
+            workOrder.grand_total
+        )}
+    </span>
+</td>
 
-                            <td class="text-center">
-                                ${statusBadge(
-                                    workOrder.status
-                                )}
-                            </td>
+<td class="text-center">
+    ${statusBadge(
+        workOrder.status
+    )}
+</td>
 
-                            <td class="text-center">
-                                ${editButton}
+<td class="text-center">
+    ${editButton}
 
-                                <button
-                                    type="button"
-                                    class="btn btn-sm btn-outline-dark px-3 mb-0 btn-detail-wo"
-                                    data-id="${escapeHtml(
-                                        workOrder.id_wo
-                                    )}"
-                                >
-                                    Detail
-                                </button>
-                            </td>
+    <button
+        type="button"
+        class="btn btn-sm btn-outline-success px-3 mb-0 me-1 btn-manage-jobs"
+        data-id="${escapeHtml(
+            workOrder.id_wo
+        )}"
+    >
+        Jasa
+    </button>
+
+    <button
+        type="button"
+        class="btn btn-sm btn-outline-dark px-3 mb-0 btn-detail-wo"
+        data-id="${escapeHtml(
+            workOrder.id_wo
+        )}"
+    >
+        Detail
+    </button>
+</td>
                         </tr>
                     `;
                     }
