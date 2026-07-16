@@ -8,18 +8,19 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('master_jobs', function (Blueprint $table) {
-            $table->string('id_job', 30)->primary();
-            $table->string('kode_motor', 10)->index();
-            $table->string('keterangan');
-            $table->unsignedBigInteger('harga');
-            $table->boolean('is_active')->default(true);
-            $table->timestamps();
+        Schema::create('failed_jobs', function (Blueprint $table) {
+            $table->id();
+            $table->string('uuid')->unique();
+            $table->text('connection');
+            $table->text('queue');
+            $table->longText('payload');
+            $table->longText('exception');
+            $table->timestamp('failed_at')->useCurrent();
         });
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('master_jobs');
+        Schema::dropIfExists('failed_jobs');
     }
 };
