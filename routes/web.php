@@ -14,6 +14,7 @@ use App\Http\Controllers\Master\PartController;
 use App\Http\Controllers\Master\MechanicController;
 use App\Http\Controllers\Master\CustomerController;
 use App\Http\Controllers\Master\VehicleController;
+use App\Http\Controllers\Transaction\ServiceAdvisorController;
 
 /*
 |--------------------------------------------------------------------------
@@ -160,6 +161,19 @@ Route::group(['middleware' => 'auth'], function () {
 			Route::put('/{vehicle}', 'update')
 				->whereNumber('vehicle')
 				->name('update');
+		});
+
+	Route::prefix('transactions/service-advisors')
+		->name('transactions.service-advisors.')
+		->controller(ServiceAdvisorController::class)
+		->group(function () {
+			Route::get('/', 'index')->name('index');
+			Route::get('/data', 'data')->name('data');
+			Route::get('/detail', 'show')->name('show');
+
+			Route::post('/', 'store')->name('store');
+			Route::put('/', 'update')->name('update');
+			Route::patch('/cancel', 'cancel')->name('cancel');
 		});
 });
 
