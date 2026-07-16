@@ -429,6 +429,181 @@
             </div>
         </div>
     </div>
+
+    {{-- Modal Kelola Part Work Order --}}
+    <div class="modal fade" id="wo-part-modal" tabindex="-1" aria-labelledby="wo-part-modal-label" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div>
+                        <h5 class="modal-title mb-1" id="wo-part-modal-label">
+                            Kelola Part Work Order
+                        </h5>
+
+                        <div class="text-sm text-secondary">
+                            <span id="wo-part-work-order-id">-</span>
+
+                            <span class="mx-1">•</span>
+
+                            <span class="badge bg-gradient-secondary" id="wo-part-status">
+                                -
+                            </span>
+                        </div>
+                    </div>
+
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
+                </div>
+
+                <div class="modal-body">
+                    <div id="wo-part-alert"></div>
+
+                    <div class="card border shadow-none mb-4" id="wo-part-form-container">
+                        <div class="card-body">
+                            <h6 class="mb-3" id="wo-part-form-title">
+                                Tambah Part
+                            </h6>
+
+                            <form id="wo-part-form">
+                                <div class="row align-items-end">
+                                    <div class="col-md-7">
+                                        <div class="mb-3 mb-md-0">
+                                            <label for="wo-part-number" class="form-label">
+                                                Master Part
+                                            </label>
+
+                                            <select class="form-select" id="wo-part-number">
+                                                <option value="">
+                                                    Memuat part...
+                                                </option>
+                                            </select>
+
+                                            <div class="invalid-feedback" id="wo-part-error-part_number"></div>
+
+                                            <small class="text-secondary" id="wo-part-stock-info">
+                                                Pilih part untuk melihat stok.
+                                            </small>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-2">
+                                        <div class="mb-3 mb-md-0">
+                                            <label for="wo-part-qty" class="form-label">
+                                                Qty
+                                            </label>
+
+                                            <input type="number" class="form-control" id="wo-part-qty" min="1"
+                                                max="999999" step="1" value="1">
+
+                                            <div class="invalid-feedback" id="wo-part-error-qty"></div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-3">
+                                        <button type="submit" class="btn bg-gradient-primary mb-0"
+                                            id="btn-save-wo-part">
+                                            Tambah
+                                        </button>
+
+                                        <button type="button" class="btn btn-light mb-0 d-none"
+                                            id="btn-cancel-edit-wo-part">
+                                            Batal Edit
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="table align-items-center mb-0" id="wo-part-table">
+                            <thead>
+                                <tr>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                        No.
+                                    </th>
+
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                        Part Number
+                                    </th>
+
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                        Nama Part
+                                    </th>
+
+                                    <th
+                                        class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 text-center">
+                                        Qty
+                                    </th>
+
+                                    <th
+                                        class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 text-center">
+                                        Stock
+                                    </th>
+
+                                    <th
+                                        class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 text-center">
+                                        RFS
+                                    </th>
+
+                                    <th
+                                        class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 text-center">
+                                        Book
+                                    </th>
+
+                                    <th
+                                        class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 text-end">
+                                        Harga
+                                    </th>
+
+                                    <th
+                                        class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 text-end">
+                                        Subtotal
+                                    </th>
+
+                                    <th
+                                        class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 text-center">
+                                        Aksi
+                                    </th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="wo-part-table-body">
+                                <tr>
+                                    <td colspan="10" class="text-center py-4">
+                                        Belum ada part.
+                                    </td>
+                                </tr>
+                            </tbody>
+
+                            <tfoot>
+                                <tr>
+                                    <th colspan="8" class="text-end">
+                                        Total Part
+                                    </th>
+
+                                    <th class="text-end" id="wo-part-total">
+                                        Rp0
+                                    </th>
+
+                                    <th></th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+
+                    <div id="wo-part-empty" class="text-center text-secondary py-4 d-none">
+                        Belum ada part pada Work Order ini.
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light mb-0" data-bs-dismiss="modal">
+                        Tutup
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @push('styles')
@@ -469,6 +644,24 @@
         #wo-job-table .btn {
             font-size: 11px;
         }
+
+        #wo-part-table th,
+        #wo-part-table td {
+            vertical-align: middle;
+        }
+
+        #wo-part-table td:nth-child(3) {
+            min-width: 220px;
+            white-space: normal;
+        }
+
+        #wo-part-table td:last-child {
+            white-space: nowrap;
+        }
+
+        #wo-part-table .btn {
+            font-size: 11px;
+        }
     </style>
 @endpush
 
@@ -480,6 +673,7 @@
 
             const detailUrl = `${baseUrl}/detail`;
 
+            // Jobs
             const workOrderJobBaseUrl =
                 @json(url('/transactions/work-order-jobs'));
 
@@ -499,6 +693,27 @@
             let activeWorkOrderStatus = null;
             let activeWorkOrderJobs = [];
             let editingWorkOrderJobId = null;
+
+            // Parts
+            const workOrderPartBaseUrl =
+                @json(url('/transactions/work-order-parts'));
+
+            const masterPartDataUrl =
+                @json(url('/master/parts/data'));
+
+            const woPartModalElement =
+                document.getElementById('wo-part-modal');
+
+            const woPartModal =
+                bootstrap.Modal.getOrCreateInstance(
+                    woPartModalElement
+                );
+
+            let masterParts = [];
+            let activePartWorkOrderId = null;
+            let activePartWorkOrderStatus = null;
+            let activeWorkOrderParts = [];
+            let editingWorkOrderPartId = null;
 
             const serviceAdvisorDataUrl =
                 @json(url('/transactions/service-advisors/data'));
@@ -535,6 +750,7 @@
 
             loadWorkOrders();
             loadServiceJobs();
+            loadMasterParts();
 
             $('#btn-add-wo').on('click', function() {
                 openCreateModal();
@@ -666,6 +882,17 @@
                 }
             );
 
+            $(document).on(
+                'click',
+                '.btn-manage-parts',
+                function() {
+                    loadWorkOrderParts(
+                        $(this).data('id'),
+                        true
+                    );
+                }
+            );
+
             $('#wo-job-form').on(
                 'submit',
                 function(event) {
@@ -733,6 +960,778 @@
                 }
             );
 
+            $('#wo-part-form').on(
+                'submit',
+                function(event) {
+                    event.preventDefault();
+
+                    clearWorkOrderPartValidation();
+
+                    const isEdit =
+                        editingWorkOrderPartId !== null;
+
+                    const payload = isEdit ? {
+                        qty: $('#wo-part-qty').val(),
+                    } : {
+                        id_wo: activePartWorkOrderId,
+
+                        part_number: $('#wo-part-number').val(),
+
+                        qty: $('#wo-part-qty').val(),
+                    };
+
+                    setWorkOrderPartSubmitLoading(true);
+
+                    $.ajax({
+                            url: isEdit ?
+                                `${workOrderPartBaseUrl}/${editingWorkOrderPartId}` : workOrderPartBaseUrl,
+
+                            type: isEdit ?
+                                'PUT' : 'POST',
+
+                            data: payload,
+                        })
+                        .done(function(response) {
+                            showWorkOrderPartAlert(
+                                'success',
+                                response.message
+                            );
+
+                            resetWorkOrderPartForm();
+
+                            loadMasterParts()
+                                .always(function() {
+                                    loadWorkOrderParts(
+                                        activePartWorkOrderId,
+                                        false
+                                    );
+                                });
+
+                            loadWorkOrders();
+                        })
+                        .fail(function(xhr) {
+                            if (
+                                xhr.status === 422 &&
+                                xhr.responseJSON?.errors
+                            ) {
+                                showWorkOrderPartValidation(
+                                    xhr.responseJSON.errors
+                                );
+
+                                return;
+                            }
+
+                            showWorkOrderPartAlert(
+                                'danger',
+                                xhr.responseJSON?.message ??
+                                'Part Work Order gagal disimpan.'
+                            );
+                        })
+                        .always(function() {
+                            setWorkOrderPartSubmitLoading(false);
+                        });
+                }
+            );
+
+            $(document).on(
+                'click',
+                '.btn-edit-wo-part',
+                function() {
+                    const workOrderPartId =
+                        Number($(this).data('id'));
+
+                    const workOrderPart =
+                        activeWorkOrderParts.find(
+                            function(item) {
+                                return Number(item.id) ===
+                                    workOrderPartId;
+                            }
+                        );
+
+                    if (!workOrderPart) {
+                        return;
+                    }
+
+                    editingWorkOrderPartId =
+                        workOrderPart.id;
+
+                    $('#wo-part-form-title')
+                        .text('Edit Jumlah Part');
+
+                    renderMasterPartOptions(
+                        workOrderPart.part_number
+                    );
+
+                    $('#wo-part-number')
+                        .val(workOrderPart.part_number)
+                        .prop('disabled', true);
+
+                    $('#wo-part-qty')
+                        .val(workOrderPart.qty);
+
+                    const availableAdditional =
+                        Number(
+                            workOrderPart.part?.qty_rfs ??
+                            0
+                        );
+
+                    const maximumQty =
+                        Number(workOrderPart.qty) +
+                        availableAdditional;
+
+                    $('#wo-part-qty')
+                        .attr('max', maximumQty);
+
+                    $('#wo-part-stock-info').text(
+                        `Qty saat ini: ${formatNumber(
+                workOrderPart.qty
+            )} | Tambahan tersedia: ${formatNumber(
+                availableAdditional
+            )} | Maksimal: ${formatNumber(
+                maximumQty
+            )}`
+                    );
+
+                    $('#btn-save-wo-part')
+                        .text('Simpan Perubahan');
+
+                    $('#btn-cancel-edit-wo-part')
+                        .removeClass('d-none');
+
+                    clearWorkOrderPartValidation();
+                }
+            );
+
+            $('#btn-cancel-edit-wo-part').on(
+                'click',
+                function() {
+                    resetWorkOrderPartForm();
+                }
+            );
+
+            $(document).on(
+                'click',
+                '.btn-delete-wo-part',
+                function() {
+                    const workOrderPartId =
+                        $(this).data('id');
+
+                    const partName =
+                        $(this).data('name');
+
+                    if (
+                        !confirm(
+                            `Yakin ingin menghapus part "${partName}"? Reservasi stok akan dikembalikan.`
+                        )
+                    ) {
+                        return;
+                    }
+
+                    $.ajax({
+                            url: `${workOrderPartBaseUrl}/` +
+                                workOrderPartId,
+
+                            type: 'DELETE',
+                        })
+                        .done(function(response) {
+                            showWorkOrderPartAlert(
+                                'success',
+                                response.message
+                            );
+
+                            resetWorkOrderPartForm();
+
+                            loadMasterParts()
+                                .always(function() {
+                                    loadWorkOrderParts(
+                                        activePartWorkOrderId,
+                                        false
+                                    );
+                                });
+
+                            loadWorkOrders();
+                        })
+                        .fail(function(xhr) {
+                            const message =
+                                firstValidationMessage(xhr) ??
+                                xhr.responseJSON?.message ??
+                                'Part Work Order gagal dihapus.';
+
+                            showWorkOrderPartAlert(
+                                'danger',
+                                message
+                            );
+                        });
+                }
+            );
+
+            function loadMasterParts() {
+                $('#wo-part-number')
+                    .prop('disabled', true)
+                    .html(`
+            <option value="">
+                Memuat master part...
+            </option>
+        `);
+
+                return $.ajax({
+                        url: masterPartDataUrl,
+                        type: 'GET',
+                    })
+                    .done(function(response) {
+                        const rows =
+                            Array.isArray(response.data) ?
+                            response.data :
+                            (
+                                Array.isArray(
+                                    response.data?.data
+                                ) ?
+                                response.data.data : []
+                            );
+
+                        masterParts = rows.filter(
+                            function(part) {
+                                const activeValue =
+                                    part.is_active ??
+                                    part.status_aktif ??
+                                    false;
+
+                                return (
+                                    activeValue === true ||
+                                    activeValue === 1 ||
+                                    activeValue === '1' ||
+                                    activeValue === 'true'
+                                );
+                            }
+                        );
+
+                        renderMasterPartOptions();
+                    })
+                    .fail(function(xhr) {
+                        masterParts = [];
+
+                        $('#wo-part-number')
+                            .prop('disabled', true)
+                            .html(`
+                <option value="">
+                    Master part gagal dimuat
+                </option>
+            `);
+
+                        console.error(
+                            'Gagal memuat Master Part:',
+                            xhr.responseJSON ??
+                            xhr.responseText
+                        );
+                    });
+            }
+
+            function loadWorkOrderParts(
+                workOrderId,
+                showModal = true
+            ) {
+                $('#wo-part-table-body').html(`
+        <tr>
+            <td
+                colspan="10"
+                class="text-center py-4"
+            >
+                Memuat part...
+            </td>
+        </tr>
+    `);
+
+                $('#wo-part-empty')
+                    .addClass('d-none');
+
+                return $.ajax({
+                        url: detailUrl,
+                        type: 'GET',
+                        data: {
+                            id_wo: workOrderId,
+                        },
+                    })
+                    .done(function(response) {
+                        const workOrder =
+                            response.data;
+
+                        activePartWorkOrderId =
+                            workOrder.id_wo;
+
+                        activePartWorkOrderStatus =
+                            workOrder.status;
+
+                        activeWorkOrderParts =
+                            workOrder.parts ?? [];
+
+                        $('#wo-part-work-order-id')
+                            .text(activePartWorkOrderId);
+
+                        $('#wo-part-status')
+                            .attr(
+                                'class',
+                                `badge ${
+                    workOrderStatusClass(
+                        activePartWorkOrderStatus
+                    )
+                }`
+                            )
+                            .text(
+                                activePartWorkOrderStatus
+                            );
+
+                        const editable = [
+                            'DRAFT',
+                            'MENUNGGU',
+                        ].includes(
+                            activePartWorkOrderStatus
+                        );
+
+                        $('#wo-part-form-container')
+                            .toggleClass(
+                                'd-none',
+                                !editable
+                            );
+
+                        resetWorkOrderPartForm();
+                        renderWorkOrderParts();
+
+                        $('#wo-part-total').text(
+                            formatRupiah(
+                                workOrder.total_part
+                            )
+                        );
+
+                        if (showModal) {
+                            woPartModal.show();
+                        }
+                    })
+                    .fail(function(xhr) {
+                        showAlert(
+                            'danger',
+                            xhr.responseJSON?.message ??
+                            'Data part Work Order gagal dimuat.'
+                        );
+                    });
+            }
+
+            function renderWorkOrderParts() {
+                const editable = [
+                    'DRAFT',
+                    'MENUNGGU',
+                ].includes(
+                    activePartWorkOrderStatus
+                );
+
+                if (
+                    activeWorkOrderParts.length === 0
+                ) {
+                    $('#wo-part-table-body')
+                        .empty();
+
+                    $('#wo-part-empty')
+                        .removeClass('d-none');
+
+                    return;
+                }
+
+                $('#wo-part-empty')
+                    .addClass('d-none');
+
+                const rows =
+                    activeWorkOrderParts.map(
+                        function(workOrderPart, index) {
+                            const masterPart =
+                                workOrderPart.part;
+
+                            const actions = editable ?
+                                `
+                        <button
+                            type="button"
+                            class="btn btn-sm btn-outline-primary px-3 mb-0 me-1 btn-edit-wo-part"
+                            data-id="${workOrderPart.id}"
+                        >
+                            Edit
+                        </button>
+
+                        <button
+                            type="button"
+                            class="btn btn-sm btn-outline-danger px-3 mb-0 btn-delete-wo-part"
+                            data-id="${workOrderPart.id}"
+                            data-name="${escapeHtml(
+                                workOrderPart.nama_part
+                            )}"
+                        >
+                            Hapus
+                        </button>
+                      ` :
+                                `
+                        <span class="text-xs text-secondary">
+                            Tidak dapat diubah
+                        </span>
+                      `;
+
+                            return `
+                    <tr>
+                        <td class="ps-4">
+                            <span class="text-sm">
+                                ${index + 1}
+                            </span>
+                        </td>
+
+                        <td>
+                            <span class="text-sm font-weight-bold">
+                                ${escapeHtml(
+                                    workOrderPart.part_number
+                                )}
+                            </span>
+                        </td>
+
+                        <td>
+                            <span class="text-sm">
+                                ${escapeHtml(
+                                    workOrderPart.nama_part
+                                )}
+                            </span>
+                        </td>
+
+                        <td class="text-center">
+                            <span class="badge bg-gradient-info">
+                                ${formatNumber(
+                                    workOrderPart.qty
+                                )}
+                            </span>
+                        </td>
+
+                        <td class="text-center">
+                            <span class="text-sm">
+                                ${formatNumber(
+                                    masterPart?.qty_stock
+                                        ?? 0
+                                )}
+                            </span>
+                        </td>
+
+                        <td class="text-center">
+                            <span class="text-sm">
+                                ${formatNumber(
+                                    masterPart?.qty_rfs
+                                        ?? 0
+                                )}
+                            </span>
+                        </td>
+
+                        <td class="text-center">
+                            <span class="text-sm">
+                                ${formatNumber(
+                                    masterPart?.qty_book
+                                        ?? 0
+                                )}
+                            </span>
+                        </td>
+
+                        <td class="text-end">
+                            <span class="text-sm">
+                                ${formatRupiah(
+                                    workOrderPart.harga_satuan
+                                )}
+                            </span>
+                        </td>
+
+                        <td class="text-end">
+                            <span class="text-sm font-weight-bold">
+                                ${formatRupiah(
+                                    workOrderPart.subtotal
+                                )}
+                            </span>
+                        </td>
+
+                        <td class="text-center">
+                            ${actions}
+                        </td>
+                    </tr>
+                `;
+                        }
+                    ).join('');
+
+                $('#wo-part-table-body')
+                    .html(rows);
+            }
+
+            function renderMasterPartOptions(
+                selectedPartNumber = null
+            ) {
+                const select =
+                    $('#wo-part-number');
+
+                if (masterParts.length === 0) {
+                    select
+                        .prop('disabled', true)
+                        .html(`
+                <option value="">
+                    Tidak ada Master Part aktif
+                </option>
+            `);
+
+                    return;
+                }
+
+                const usedPartNumbers =
+                    activeWorkOrderParts.map(
+                        function(workOrderPart) {
+                            return String(
+                                workOrderPart.part_number
+                            );
+                        }
+                    );
+
+                const availableParts =
+                    masterParts.filter(
+                        function(part) {
+                            const partNumber =
+                                String(part.part_number);
+
+                            const isSelected =
+                                partNumber ===
+                                String(
+                                    selectedPartNumber ?? ''
+                                );
+
+                            const notUsed = !usedPartNumbers.includes(
+                                partNumber
+                            );
+
+                            const hasRfs =
+                                Number(part.qty_rfs ?? 0) > 0;
+
+                            return (
+                                isSelected ||
+                                (
+                                    notUsed &&
+                                    hasRfs
+                                )
+                            );
+                        }
+                    );
+
+                if (availableParts.length === 0) {
+                    select
+                        .prop('disabled', true)
+                        .html(`
+                <option value="">
+                    Tidak ada part dengan stok RFS tersedia
+                </option>
+            `);
+
+                    return;
+                }
+
+                const options =
+                    availableParts.map(
+                        function(part) {
+                            return `
+                    <option
+                        value="${escapeHtml(
+                            part.part_number
+                        )}"
+                    >
+                        ${escapeHtml(
+                            part.part_number
+                        )}
+                        — ${escapeHtml(
+                            part.nama_part
+                        )}
+                        — RFS: ${formatNumber(
+                            part.qty_rfs
+                        )}
+                        — ${formatRupiah(
+                            part.harga
+                        )}
+                    </option>
+                `;
+                        }
+                    ).join('');
+
+                select
+                    .prop(
+                        'disabled',
+                        editingWorkOrderPartId !== null
+                    )
+                    .html(`
+            <option value="">
+                Pilih part
+            </option>
+            ${options}
+        `);
+
+                if (selectedPartNumber) {
+                    select.val(
+                        String(selectedPartNumber)
+                    );
+                }
+            }
+
+            function renderSelectedPartStock() {
+                if (editingWorkOrderPartId !== null) {
+                    return;
+                }
+
+                const partNumber =
+                    $('#wo-part-number').val();
+
+                const part =
+                    masterParts.find(
+                        function(item) {
+                            return String(
+                                item.part_number
+                            ) === String(partNumber);
+                        }
+                    );
+
+                if (!part) {
+                    $('#wo-part-stock-info').text(
+                        'Pilih part untuk melihat stok.'
+                    );
+
+                    $('#wo-part-qty')
+                        .attr('max', 999999);
+
+                    return;
+                }
+
+                const qtyRfs =
+                    Number(part.qty_rfs ?? 0);
+
+                $('#wo-part-qty')
+                    .attr('max', qtyRfs);
+
+                $('#wo-part-stock-info').text(
+                    `Stock: ${formatNumber(
+            part.qty_stock
+        )} | RFS tersedia: ${formatNumber(
+            qtyRfs
+        )} | Book: ${formatNumber(
+            part.qty_book
+        )}`
+                );
+            }
+
+            function resetWorkOrderPartForm() {
+                editingWorkOrderPartId = null;
+
+                $('#wo-part-form')[0].reset();
+
+                $('#wo-part-form-title')
+                    .text('Tambah Part');
+
+                $('#wo-part-qty')
+                    .val(1)
+                    .attr('max', 999999);
+
+                $('#wo-part-number')
+                    .prop('disabled', false);
+
+                $('#wo-part-stock-info').text(
+                    'Pilih part untuk melihat stok.'
+                );
+
+                $('#btn-save-wo-part')
+                    .text('Tambah');
+
+                $('#btn-cancel-edit-wo-part')
+                    .addClass('d-none');
+
+                clearWorkOrderPartValidation();
+                renderMasterPartOptions();
+            }
+
+            function showWorkOrderPartValidation(
+                errors
+            ) {
+                Object.keys(errors).forEach(
+                    function(field) {
+                        if (
+                            field === 'id_wo' ||
+                            field === 'part'
+                        ) {
+                            showWorkOrderPartAlert(
+                                'danger',
+                                errors[field][0]
+                            );
+
+                            return;
+                        }
+
+                        const input =
+                            field === 'part_number' ?
+                            $('#wo-part-number') :
+                            $(`#wo-part-${field}`);
+
+                        const errorContainer =
+                            $(`#wo-part-error-${field}`);
+
+                        input.addClass('is-invalid');
+
+                        errorContainer.text(
+                            errors[field][0]
+                        );
+                    }
+                );
+            }
+
+            function clearWorkOrderPartValidation() {
+                $('#wo-part-form .is-invalid')
+                    .removeClass('is-invalid');
+
+                $('#wo-part-form .invalid-feedback')
+                    .text('');
+            }
+
+            function setWorkOrderPartSubmitLoading(
+                isLoading
+            ) {
+                const button =
+                    $('#btn-save-wo-part');
+
+                button.prop(
+                    'disabled',
+                    isLoading
+                );
+
+                if (isLoading) {
+                    button.text('Menyimpan...');
+                    return;
+                }
+
+                button.text(
+                    editingWorkOrderPartId ?
+                    'Simpan Perubahan' :
+                    'Tambah'
+                );
+            }
+
+            function showWorkOrderPartAlert(
+                type,
+                message
+            ) {
+                $('#wo-part-alert').html(`
+        <div
+            class="alert alert-${type} alert-dismissible text-white fade show"
+            role="alert"
+        >
+            ${escapeHtml(message)}
+
+            <button
+                type="button"
+                class="btn-close btn-close-white"
+                data-bs-dismiss="alert"
+                aria-label="Tutup"
+            ></button>
+        </div>
+    `);
+            }
+
+            // 
             $(document).on(
                 'click',
                 '.btn-edit-wo-job',
@@ -1783,64 +2782,74 @@
                             </td>
 
                          <td>
-    <span class="text-sm">
-        ${escapeHtml(
-            workOrder.mechanic
-                ?.nama_mekanik
-                ?? 'Belum ditentukan'
-        )}
-    </span>
-</td>
+                            <span class="text-sm">
+                                ${escapeHtml(
+                                    workOrder.mechanic
+                                        ?.nama_mekanik
+                                        ?? 'Belum ditentukan'
+                                )}
+                            </span>
+                        </td>
 
-<td class="text-center">
-    <span class="badge bg-gradient-info">
-        ${workOrder.jobs_count ?? 0}
-    </span>
-</td>
+                        <td class="text-center">
+                            <span class="badge bg-gradient-info">
+                                ${workOrder.jobs_count ?? 0}
+                            </span>
+                        </td>
 
-<td class="text-center">
-    <span class="badge bg-gradient-warning">
-        ${workOrder.parts_count ?? 0}
-    </span>
-</td>
+                        <td class="text-center">
+                            <span class="badge bg-gradient-warning">
+                                ${workOrder.parts_count ?? 0}
+                            </span>
+                        </td>
 
-<td class="text-end">
-    <span class="text-sm font-weight-bold">
-        ${formatRupiah(
-            workOrder.grand_total
-        )}
-    </span>
-</td>
+                        <td class="text-end">
+                            <span class="text-sm font-weight-bold">
+                                ${formatRupiah(
+                                    workOrder.grand_total
+                                )}
+                            </span>
+                        </td>
 
-<td class="text-center">
-    ${statusBadge(
-        workOrder.status
-    )}
-</td>
+                        <td class="text-center">
+                            ${statusBadge(
+                                workOrder.status
+                            )}
+                        </td>
 
-<td class="text-center">
-    ${editButton}
+                       <td class="text-center">
+                                ${editButton}
 
-    <button
-        type="button"
-        class="btn btn-sm btn-outline-success px-3 mb-0 me-1 btn-manage-jobs"
-        data-id="${escapeHtml(
-            workOrder.id_wo
-        )}"
-    >
-        Jasa
-    </button>
+                                <button
+                                    type="button"
+                                    class="btn btn-sm btn-outline-success px-3 mb-0 me-1 btn-manage-jobs"
+                                    data-id="${escapeHtml(
+                                        workOrder.id_wo
+                                    )}"
+                                >
+                                    Jasa
+                                </button>
 
-    <button
-        type="button"
-        class="btn btn-sm btn-outline-dark px-3 mb-0 btn-detail-wo"
-        data-id="${escapeHtml(
-            workOrder.id_wo
-        )}"
-    >
-        Detail
-    </button>
-</td>
+                                <button
+                                    type="button"
+                                    class="btn btn-sm btn-outline-warning px-3 mb-0 me-1 btn-manage-parts"
+                                    data-id="${escapeHtml(
+                                        workOrder.id_wo
+                                    )}"
+                                >
+                                    Part
+                                </button>
+
+                                <button
+                                    type="button"
+                                    class="btn btn-sm btn-outline-dark px-3 mb-0 btn-detail-wo"
+                                    data-id="${escapeHtml(
+                                        workOrder.id_wo
+                                    )}"
+                                >
+                                    Detail
+                                </button>
+                            </td>
                         </tr>
                     `;
                     }

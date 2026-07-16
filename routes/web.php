@@ -17,6 +17,7 @@ use App\Http\Controllers\Master\VehicleController;
 use App\Http\Controllers\Transaction\ServiceAdvisorController;
 use App\Http\Controllers\Transaction\WorkOrderController;
 use App\Http\Controllers\Transaction\WorkOrderJobController;
+use App\Http\Controllers\Transaction\WorkOrderPartController;
 
 /*
 |--------------------------------------------------------------------------
@@ -202,6 +203,22 @@ Route::group(['middleware' => 'auth'], function () {
 
 			Route::delete('/{workOrderJob}', 'destroy')
 				->whereNumber('workOrderJob')
+				->name('destroy');
+		});
+
+	Route::prefix('transactions/work-order-parts')
+		->name('transactions.work-order-parts.')
+		->controller(WorkOrderPartController::class)
+		->group(function () {
+			Route::post('/', 'store')
+				->name('store');
+
+			Route::put('/{workOrderPart}', 'update')
+				->whereNumber('workOrderPart')
+				->name('update');
+
+			Route::delete('/{workOrderPart}', 'destroy')
+				->whereNumber('workOrderPart')
 				->name('destroy');
 		});
 });
