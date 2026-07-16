@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Master\ServiceJobController;
+use App\Http\Controllers\Master\PartController;
 
 /*
 |--------------------------------------------------------------------------
@@ -87,6 +88,26 @@ Route::group(['middleware' => 'auth'], function () {
 
 			Route::patch('/{serviceJob}/toggle-status', 'toggleStatus')
 				->where('serviceJob', '[A-Za-z0-9]+')
+				->name('toggle-status');
+		});
+	Route::prefix('master/parts')
+		->name('master.parts.')
+		->controller(PartController::class)
+		->group(function () {
+			Route::get('/', 'index')->name('index');
+			Route::get('/data', 'data')->name('data');
+			Route::post('/', 'store')->name('store');
+
+			Route::get('/{part}', 'show')
+				->where('part', '[A-Za-z0-9]+')
+				->name('show');
+
+			Route::put('/{part}', 'update')
+				->where('part', '[A-Za-z0-9]+')
+				->name('update');
+
+			Route::patch('/{part}/toggle-status', 'toggleStatus')
+				->where('part', '[A-Za-z0-9]+')
 				->name('toggle-status');
 		});
 });

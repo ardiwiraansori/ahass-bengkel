@@ -1,24 +1,6 @@
 @extends('layouts.user_type.auth')
 
-@section('title', 'Master Jasa')
-
-@push('styles')
-    <style>
-        #job-table th,
-        #job-table td {
-            vertical-align: middle;
-        }
-
-        #job-table td:nth-child(4) {
-            min-width: 260px;
-            white-space: normal;
-        }
-
-        #job-table .btn {
-            font-size: 11px;
-        }
-    </style>
-@endpush
+@section('title', 'Master Part')
 
 @section('content')
     <div class="row">
@@ -29,15 +11,15 @@
                 <div class="card-header pb-0">
                     <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between">
                         <div>
-                            <h5 class="mb-1">Master Jasa</h5>
+                            <h5 class="mb-1">Master Part</h5>
                             <p class="text-sm text-secondary mb-0">
-                                Kelola daftar jasa servis bengkel AHASS.
+                                Kelola data suku cadang dan ketersediaan stok.
                             </p>
                         </div>
 
-                        <button type="button" class="btn bg-gradient-primary mt-3 mt-md-0 mb-0" id="btn-add-job">
+                        <button type="button" class="btn bg-gradient-primary mt-3 mt-md-0 mb-0" id="btn-add-part">
                             <i class="fas fa-plus me-1"></i>
-                            Tambah Jasa
+                            Tambah Part
                         </button>
                     </div>
                 </div>
@@ -50,14 +32,14 @@
                                     <i class="fas fa-search"></i>
                                 </span>
 
-                                <input type="text" class="form-control" id="search-job"
-                                    placeholder="Cari ID Job, kode motor, atau keterangan...">
+                                <input type="text" class="form-control" id="search-part"
+                                    placeholder="Cari Part Number atau nama part...">
                             </div>
                         </div>
                     </div>
 
                     <div class="table-responsive">
-                        <table class="table align-items-center mb-0" id="job-table">
+                        <table class="table align-items-center mb-0" id="part-table">
                             <thead>
                                 <tr>
                                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
@@ -65,20 +47,31 @@
                                     </th>
 
                                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                                        ID Job
+                                        Part Number
                                     </th>
 
                                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                                        Kode Motor
-                                    </th>
-
-                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                                        Keterangan
+                                        Nama Part
                                     </th>
 
                                     <th
                                         class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 text-end">
                                         Harga
+                                    </th>
+
+                                    <th
+                                        class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 text-center">
+                                        Stock
+                                    </th>
+
+                                    <th
+                                        class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 text-center">
+                                        RFS
+                                    </th>
+
+                                    <th
+                                        class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 text-center">
+                                        Book
                                     </th>
 
                                     <th
@@ -93,9 +86,9 @@
                                 </tr>
                             </thead>
 
-                            <tbody id="job-table-body">
+                            <tbody id="part-table-body">
                                 <tr>
-                                    <td colspan="7" class="text-center py-4">
+                                    <td colspan="9" class="text-center py-4">
                                         Memuat data...
                                     </td>
                                 </tr>
@@ -103,22 +96,22 @@
                         </table>
                     </div>
 
-                    <div id="job-empty" class="text-center text-secondary py-4 d-none">
-                        Data jasa tidak ditemukan.
+                    <div id="part-empty" class="text-center text-secondary py-4 d-none">
+                        Data part tidak ditemukan.
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    {{-- Modal --}}
-    <div class="modal fade" id="job-modal" tabindex="-1" aria-labelledby="job-modal-label" aria-hidden="true">
+    {{-- Modal tambah/edit part --}}
+    <div class="modal fade" id="part-modal" tabindex="-1" aria-labelledby="part-modal-label" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
-                <form id="job-form">
+                <form id="part-form">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="job-modal-label">
-                            Tambah Master Jasa
+                        <h5 class="modal-title" id="part-modal-label">
+                            Tambah Master Part
                         </h5>
 
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
@@ -128,35 +121,24 @@
                         <input type="hidden" id="form-mode" value="create">
 
                         <div class="mb-3">
-                            <label for="id_job" class="form-label">
-                                ID Job
+                            <label for="part_number" class="form-label">
+                                Part Number
                             </label>
 
-                            <input type="text" class="form-control text-uppercase" id="id_job" name="id_job"
+                            <input type="text" class="form-control text-uppercase" id="part_number" name="part_number"
                                 maxlength="30" autocomplete="off">
 
-                            <div class="invalid-feedback" id="error-id_job"></div>
+                            <div class="invalid-feedback" id="error-part_number"></div>
                         </div>
 
                         <div class="mb-3">
-                            <label for="kode_motor" class="form-label">
-                                Kode Motor
+                            <label for="nama_part" class="form-label">
+                                Nama Part
                             </label>
 
-                            <input type="text" class="form-control text-uppercase" id="kode_motor" name="kode_motor"
-                                maxlength="10" autocomplete="off">
+                            <textarea class="form-control" id="nama_part" name="nama_part" rows="3" maxlength="255"></textarea>
 
-                            <div class="invalid-feedback" id="error-kode_motor"></div>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="keterangan" class="form-label">
-                                Keterangan Jasa
-                            </label>
-
-                            <textarea class="form-control" id="keterangan" name="keterangan" rows="3" maxlength="255"></textarea>
-
-                            <div class="invalid-feedback" id="error-keterangan"></div>
+                            <div class="invalid-feedback" id="error-nama_part"></div>
                         </div>
 
                         <div class="mb-3">
@@ -169,16 +151,32 @@
 
                                 <input type="text" class="form-control text-end" id="harga" name="harga"
                                     inputmode="numeric" autocomplete="off">
-
-                                <div class="invalid-feedback" id="error-harga"></div>
                             </div>
+
+                            <div class="invalid-feedback" id="error-harga"></div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="qty_stock" class="form-label">
+                                Qty Stock
+                            </label>
+
+                            <input type="number" class="form-control" id="qty_stock" name="qty_stock" min="0"
+                                step="1" autocomplete="off">
+
+                            <div class="invalid-feedback" id="error-qty_stock"></div>
+
+                            <small class="text-secondary" id="stock-information">
+                                Part baru akan memiliki Qty RFS yang sama dengan Qty Stock
+                                dan Qty Book nol.
+                            </small>
                         </div>
 
                         <div class="form-check form-switch">
                             <input class="form-check-input" type="checkbox" id="is_active" name="is_active" checked>
 
                             <label class="form-check-label" for="is_active">
-                                Jasa aktif
+                                Part aktif
                             </label>
                         </div>
                     </div>
@@ -188,7 +186,7 @@
                             Batal
                         </button>
 
-                        <button type="submit" class="btn bg-gradient-primary mb-0" id="btn-save-job">
+                        <button type="submit" class="btn bg-gradient-primary mb-0" id="btn-save-part">
                             Simpan
                         </button>
                     </div>
@@ -198,61 +196,100 @@
     </div>
 @endsection
 
+@push('styles')
+    <style>
+        #part-table th,
+        #part-table td {
+            vertical-align: middle;
+        }
+
+        #part-table td:nth-child(3) {
+            min-width: 260px;
+            white-space: normal;
+        }
+
+        #part-table td:last-child {
+            white-space: nowrap;
+        }
+
+        #part-table .btn {
+            font-size: 11px;
+        }
+    </style>
+@endpush
+
 @push('scripts')
     <script>
         $(function() {
-            const baseUrl = @json(url('/master/jobs'));
-            const jobModalElement = document.getElementById('job-modal');
-            const jobModal = bootstrap.Modal.getOrCreateInstance(jobModalElement);
+            const baseUrl = @json(url('/master/parts'));
 
-            let jobs = [];
+            const partModalElement = document.getElementById('part-modal');
+            const partModal = bootstrap.Modal.getOrCreateInstance(
+                partModalElement
+            );
 
-            loadJobs();
+            let parts = [];
 
-            $('#btn-add-job').on('click', function() {
+            loadParts();
+
+            $('#btn-add-part').on('click', function() {
                 resetForm();
 
                 $('#form-mode').val('create');
-                $('#job-modal-label').text('Tambah Master Jasa');
-                $('#id_job').prop('readonly', false);
+                $('#part-modal-label').text('Tambah Master Part');
+                $('#part_number').prop('readonly', false);
                 $('#is_active').prop('checked', true);
 
-                jobModal.show();
+                $('#stock-information').text(
+                    'Part baru akan memiliki Qty RFS yang sama dengan Qty Stock dan Qty Book nol.'
+                );
+
+                partModal.show();
             });
 
-            $('#search-job').on('input', function() {
-                renderJobs($(this).val());
+            $('#search-part').on('input', function() {
+                renderParts($(this).val());
             });
 
             $('#harga').on('input', function() {
                 const numericValue = $(this).val().replace(/\D/g, '');
+
                 $(this).val(formatNumber(numericValue));
             });
 
-            $('#id_job, #kode_motor').on('input', function() {
+            $('#part_number').on('input', function() {
                 $(this).val($(this).val().toUpperCase());
             });
 
-            $('#job-form').on('submit', function(event) {
+            $('#part-form').on('keypress', function(event) {
+                if (
+                    event.key === 'Enter' &&
+                    event.target.tagName !== 'TEXTAREA'
+                ) {
+                    event.preventDefault();
+                }
+            });
+
+            $('#part-form').on('submit', function(event) {
                 event.preventDefault();
 
                 clearValidationErrors();
 
                 const mode = $('#form-mode').val();
-                const idJob = $('#id_job').val().trim();
+                const partNumber = $('#part_number').val().trim();
                 const isEdit = mode === 'edit';
 
                 const url = isEdit ?
-                    `${baseUrl}/${encodeURIComponent(idJob)}` :
+                    `${baseUrl}/${encodeURIComponent(partNumber)}` :
                     baseUrl;
 
                 const method = isEdit ? 'PUT' : 'POST';
 
                 const payload = {
-                    id_job: idJob,
-                    kode_motor: $('#kode_motor').val().trim(),
-                    keterangan: $('#keterangan').val().trim(),
+                    part_number: partNumber,
+                    nama_part: $('#nama_part').val().trim(),
                     harga: $('#harga').val().replace(/\D/g, ''),
+                    qty_stock: $('#qty_stock').val(),
                     is_active: $('#is_active').is(':checked') ? 1 : 0,
                 };
 
@@ -264,13 +301,16 @@
                         data: payload,
                     })
                     .done(function(response) {
-                        jobModal.hide();
+                        partModal.hide();
 
                         showAlert('success', response.message);
-                        loadJobs();
+                        loadParts();
                     })
                     .fail(function(xhr) {
-                        if (xhr.status === 422 && xhr.responseJSON?.errors) {
+                        if (
+                            xhr.status === 422 &&
+                            xhr.responseJSON?.errors
+                        ) {
                             showValidationErrors(xhr.responseJSON.errors);
                             return;
                         }
@@ -278,7 +318,7 @@
                         showAlert(
                             'danger',
                             xhr.responseJSON?.message ??
-                            'Terjadi kesalahan saat menyimpan data.'
+                            'Terjadi kesalahan saat menyimpan part.'
                         );
                     })
                     .always(function() {
@@ -286,72 +326,85 @@
                     });
             });
 
-            $(document).on('click', '.btn-edit-job', function() {
-                const idJob = $(this).data('id');
+            $(document).on('click', '.btn-edit-part', function() {
+                const partNumber = $(this).data('id');
 
                 clearValidationErrors();
 
                 $.ajax({
-                        url: `${baseUrl}/${encodeURIComponent(idJob)}`,
+                        url: `${baseUrl}/${encodeURIComponent(partNumber)}`,
                         type: 'GET',
                     })
                     .done(function(response) {
-                        const job = response.data;
+                        const part = response.data;
 
                         $('#form-mode').val('edit');
-                        $('#job-modal-label').text('Edit Master Jasa');
+                        $('#part-modal-label').text('Edit Master Part');
 
-                        $('#id_job')
-                            .val(job.id_job)
+                        $('#part_number')
+                            .val(part.part_number)
                             .prop('readonly', true);
 
-                        $('#kode_motor').val(job.kode_motor);
-                        $('#keterangan').val(job.keterangan);
-                        $('#harga').val(formatNumber(job.harga));
-                        $('#is_active').prop('checked', Boolean(job.is_active));
+                        $('#nama_part').val(part.nama_part);
+                        $('#harga').val(formatNumber(part.harga));
+                        $('#qty_stock').val(part.qty_stock);
+                        $('#is_active').prop(
+                            'checked',
+                            Boolean(part.is_active)
+                        );
 
-                        jobModal.show();
+                        $('#stock-information').text(
+                            `Qty Book saat ini: ${part.qty_book}. Qty Stock tidak boleh lebih kecil dari Qty Book.`
+                        );
+
+                        partModal.show();
                     })
                     .fail(function(xhr) {
                         showAlert(
                             'danger',
                             xhr.responseJSON?.message ??
-                            'Data jasa gagal diambil.'
+                            'Data part gagal diambil.'
                         );
                     });
             });
 
-            $(document).on('click', '.btn-toggle-job', function() {
-                const idJob = $(this).data('id');
+            $(document).on('click', '.btn-toggle-part', function() {
+                const partNumber = $(this).data('id');
                 const isActive = Number($(this).data('active')) === 1;
 
-                const actionText = isActive ? 'menonaktifkan' : 'mengaktifkan';
+                const actionText = isActive ?
+                    'menonaktifkan' :
+                    'mengaktifkan';
 
-                if (!confirm(`Yakin ingin ${actionText} jasa ${idJob}?`)) {
+                if (
+                    !confirm(
+                        `Yakin ingin ${actionText} part ${partNumber}?`
+                    )
+                ) {
                     return;
                 }
 
                 $.ajax({
-                        url: `${baseUrl}/${encodeURIComponent(idJob)}/toggle-status`,
+                        url: `${baseUrl}/${encodeURIComponent(partNumber)}/toggle-status`,
                         type: 'PATCH',
                     })
                     .done(function(response) {
                         showAlert('success', response.message);
-                        loadJobs();
+                        loadParts();
                     })
                     .fail(function(xhr) {
                         showAlert(
                             'danger',
                             xhr.responseJSON?.message ??
-                            'Status jasa gagal diubah.'
+                            'Status part gagal diubah.'
                         );
                     });
             });
 
-            function loadJobs() {
-                $('#job-table-body').html(`
+            function loadParts() {
+                $('#part-table-body').html(`
                 <tr>
-                    <td colspan="7" class="text-center py-4">
+                    <td colspan="9" class="text-center py-4">
                         Memuat data...
                     </td>
                 </tr>
@@ -362,16 +415,20 @@
                         type: 'GET',
                     })
                     .done(function(response) {
-                        jobs = response.data ?? [];
-                        renderJobs($('#search-job').val());
+                        parts = response.data ?? [];
+
+                        renderParts($('#search-part').val());
                     })
                     .fail(function(xhr) {
-                        jobs = [];
+                        parts = [];
 
-                        $('#job-table-body').html(`
+                        $('#part-table-body').html(`
                     <tr>
-                        <td colspan="7" class="text-center text-danger py-4">
-                            Data gagal dimuat.
+                        <td
+                            colspan="9"
+                            class="text-center text-danger py-4"
+                        >
+                            Data part gagal dimuat.
                         </td>
                     </tr>
                 `);
@@ -379,72 +436,87 @@
                         showAlert(
                             'danger',
                             xhr.responseJSON?.message ??
-                            'Master jasa gagal dimuat.'
+                            'Master part gagal dimuat.'
                         );
                     });
             }
 
-            function renderJobs(keyword = '') {
-                const normalizedKeyword = keyword.toLowerCase().trim();
+            function renderParts(keyword = '') {
+                const normalizedKeyword = keyword
+                    .toLowerCase()
+                    .trim();
 
-                const filteredJobs = jobs.filter(function(job) {
+                const filteredParts = parts.filter(function(part) {
                     const searchableText = [
-                        job.id_job,
-                        job.kode_motor,
-                        job.keterangan,
+                        part.part_number,
+                        part.nama_part,
                     ].join(' ').toLowerCase();
 
                     return searchableText.includes(normalizedKeyword);
                 });
 
-                if (filteredJobs.length === 0) {
-                    $('#job-table-body').empty();
-                    $('#job-empty').removeClass('d-none');
+                if (filteredParts.length === 0) {
+                    $('#part-table-body').empty();
+                    $('#part-empty').removeClass('d-none');
                     return;
                 }
 
-                $('#job-empty').addClass('d-none');
+                $('#part-empty').addClass('d-none');
 
-                const rows = filteredJobs.map(function(job, index) {
-                    const statusBadge = job.is_active ?
+                const rows = filteredParts.map(function(part, index) {
+                    const statusBadge = part.is_active ?
                         '<span class="badge bg-gradient-success">Aktif</span>' :
                         '<span class="badge bg-gradient-secondary">Nonaktif</span>';
 
-                    const toggleLabel = job.is_active ?
+                    const toggleLabel = part.is_active ?
                         'Nonaktif' :
                         'Aktifkan';
 
-                    const toggleClass = job.is_active ?
+                    const toggleClass = part.is_active ?
                         'btn-outline-danger' :
                         'btn-outline-success';
 
                     return `
                     <tr>
                         <td class="ps-4">
-                            <span class="text-sm">${index + 1}</span>
-                        </td>
-
-                        <td>
-                            <span class="text-sm font-weight-bold">
-                                ${escapeHtml(job.id_job)}
+                            <span class="text-sm">
+                                ${index + 1}
                             </span>
                         </td>
 
                         <td>
-                            <span class="badge bg-gradient-info">
-                                ${escapeHtml(job.kode_motor)}
+                            <span class="text-sm font-weight-bold">
+                                ${escapeHtml(part.part_number)}
                             </span>
                         </td>
 
                         <td>
                             <span class="text-sm">
-                                ${escapeHtml(job.keterangan)}
+                                ${escapeHtml(part.nama_part)}
                             </span>
                         </td>
 
                         <td class="text-end">
                             <span class="text-sm font-weight-bold">
-                                ${formatRupiah(job.harga)}
+                                ${formatRupiah(part.harga)}
+                            </span>
+                        </td>
+
+                        <td class="text-center">
+                            <span class="badge bg-gradient-dark">
+                                ${part.qty_stock}
+                            </span>
+                        </td>
+
+                        <td class="text-center">
+                            <span class="badge bg-gradient-success">
+                                ${part.qty_rfs}
+                            </span>
+                        </td>
+
+                        <td class="text-center">
+                            <span class="badge bg-gradient-warning">
+                                ${part.qty_book}
                             </span>
                         </td>
 
@@ -455,17 +527,17 @@
                         <td class="text-center">
                             <button
                                 type="button"
-                                class="btn btn-sm btn-outline-primary mb-0 me-1 btn-edit-job"
-                                data-id="${escapeHtml(job.id_job)}"
+                                class="btn btn-sm btn-outline-primary px-3 mb-0 me-1 btn-edit-part"
+                                data-id="${escapeHtml(part.part_number)}"
                             >
                                 Edit
                             </button>
 
                             <button
                                 type="button"
-                                class="btn btn-sm ${toggleClass} mb-0 btn-toggle-job"
-                                data-id="${escapeHtml(job.id_job)}"
-                                data-active="${job.is_active ? 1 : 0}"
+                                class="btn btn-sm ${toggleClass} px-3 mb-0 btn-toggle-part"
+                                data-id="${escapeHtml(part.part_number)}"
+                                data-active="${part.is_active ? 1 : 0}"
                             >
                                 ${toggleLabel}
                             </button>
@@ -474,12 +546,13 @@
                 `;
                 }).join('');
 
-                $('#job-table-body').html(rows);
+                $('#part-table-body').html(rows);
             }
 
             function resetForm() {
-                $('#job-form')[0].reset();
-                $('#id_job').prop('readonly', false);
+                $('#part-form')[0].reset();
+
+                $('#part_number').prop('readonly', false);
                 $('#is_active').prop('checked', true);
 
                 clearValidationErrors();
@@ -492,16 +565,22 @@
 
                     input.addClass('is-invalid');
                     errorContainer.text(errors[field][0]);
+
+                    if (field === 'harga') {
+                        $('#harga')
+                            .closest('.input-group')
+                            .addClass('has-validation');
+                    }
                 });
             }
 
             function clearValidationErrors() {
-                $('#job-form .is-invalid').removeClass('is-invalid');
-                $('#job-form .invalid-feedback').text('');
+                $('#part-form .is-invalid').removeClass('is-invalid');
+                $('#part-form .invalid-feedback').text('');
             }
 
             function setSubmitLoading(isLoading) {
-                const button = $('#btn-save-job');
+                const button = $('#btn-save-part');
 
                 button.prop('disabled', isLoading);
                 button.text(isLoading ? 'Menyimpan...' : 'Simpan');
@@ -532,19 +611,23 @@
                     );
 
                     if (alertElement) {
-                        bootstrap.Alert.getOrCreateInstance(alertElement).close();
+                        bootstrap.Alert
+                            .getOrCreateInstance(alertElement)
+                            .close();
                     }
                 }, 4000);
             }
 
             function formatNumber(value) {
-                const number = String(value ?? '').replace(/\D/g, '');
+                const numericValue = String(value ?? '')
+                    .replace(/\D/g, '');
 
-                if (!number) {
+                if (!numericValue) {
                     return '';
                 }
 
-                return new Intl.NumberFormat('id-ID').format(Number(number));
+                return new Intl.NumberFormat('id-ID')
+                    .format(Number(numericValue));
             }
 
             function formatRupiah(value) {
@@ -556,7 +639,9 @@
             }
 
             function escapeHtml(value) {
-                return $('<div>').text(value ?? '').html();
+                return $('<div>')
+                    .text(value ?? '')
+                    .html();
             }
         });
     </script>
