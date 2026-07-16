@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Master\ServiceJobController;
 use App\Http\Controllers\Master\PartController;
 use App\Http\Controllers\Master\MechanicController;
+use App\Http\Controllers\Master\CustomerController;
+use App\Http\Controllers\Master\VehicleController;
 
 /*
 |--------------------------------------------------------------------------
@@ -130,6 +132,34 @@ Route::group(['middleware' => 'auth'], function () {
 			Route::patch('/{mechanic}/toggle-status', 'toggleStatus')
 				->where('mechanic', '[A-Za-z0-9\-]+')
 				->name('toggle-status');
+		});
+
+	Route::prefix('master/customers')
+		->name('master.customers.')
+		->controller(CustomerController::class)
+		->group(function () {
+			Route::get('/', 'index')->name('index');
+			Route::get('/data', 'data')->name('data');
+			Route::get('/detail', 'show')->name('show');
+
+			Route::post('/', 'store')->name('store');
+			Route::put('/', 'update')->name('update');
+		});
+
+	Route::prefix('master/vehicles')
+		->name('master.vehicles.')
+		->controller(VehicleController::class)
+		->group(function () {
+			Route::get('/data', 'data')->name('data');
+			Route::post('/', 'store')->name('store');
+
+			Route::get('/{vehicle}', 'show')
+				->whereNumber('vehicle')
+				->name('show');
+
+			Route::put('/{vehicle}', 'update')
+				->whereNumber('vehicle')
+				->name('update');
 		});
 });
 

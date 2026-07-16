@@ -30,4 +30,15 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'dgi' => [
+        'dealer_id' => env('DEALER_ID', '68601'),
+        'base_url' => env(
+            'DGI_BASE_URL',
+            'https://dgitest.menara-agung.com/dgi-api/v1.5'
+        ),
+        'api_key' => env('DGI_API_KEY'),
+        'email' => env('DGI_EMAIL'),
+        'password' => env('DGI_PASSWORD'),
+    ],
+
 ];
