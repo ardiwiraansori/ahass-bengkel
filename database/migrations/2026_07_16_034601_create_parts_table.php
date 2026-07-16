@@ -8,11 +8,15 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('master_jobs', function (Blueprint $table) {
-            $table->string('id_job', 30)->primary();
-            $table->string('kode_motor', 10)->index();
-            $table->string('keterangan');
+        Schema::create('master_parts', function (Blueprint $table) {
+            $table->string('part_number', 30)->primary();
+            $table->string('nama_part');
             $table->unsignedBigInteger('harga');
+
+            $table->unsignedInteger('qty_stock')->default(0);
+            $table->unsignedInteger('qty_rfs')->default(0);
+            $table->unsignedInteger('qty_book')->default(0);
+
             $table->boolean('is_active')->default(true);
             $table->timestamps();
         });
@@ -20,6 +24,6 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::dropIfExists('master_jobs');
+        Schema::dropIfExists('master_parts');
     }
 };
