@@ -23,4 +23,9 @@ class Mechanic extends Model
     protected $casts = [
         'status_aktif' => 'boolean',
     ];
+
+    public function getRouteKeyName(): string
+    {
+        return 'honda_id_mekanik';
+    }
 }
