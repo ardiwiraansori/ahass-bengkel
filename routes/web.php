@@ -15,6 +15,7 @@ use App\Http\Controllers\Master\MechanicController;
 use App\Http\Controllers\Master\CustomerController;
 use App\Http\Controllers\Master\VehicleController;
 use App\Http\Controllers\Transaction\ServiceAdvisorController;
+use App\Http\Controllers\Transaction\WorkOrderController;
 
 /*
 |--------------------------------------------------------------------------
@@ -174,6 +175,18 @@ Route::group(['middleware' => 'auth'], function () {
 			Route::post('/', 'store')->name('store');
 			Route::put('/', 'update')->name('update');
 			Route::patch('/cancel', 'cancel')->name('cancel');
+		});
+
+	Route::prefix('transactions/work-orders')
+		->name('transactions.work-orders.')
+		->controller(WorkOrderController::class)
+		->group(function () {
+			Route::get('/', 'index')->name('index');
+			Route::get('/data', 'data')->name('data');
+			Route::get('/detail', 'show')->name('show');
+
+			Route::post('/', 'store')->name('store');
+			Route::put('/', 'update')->name('update');
 		});
 });
 
